@@ -1,7 +1,7 @@
 .debug {
   border: 1px solid red;
 }
-.flickrViewr .loader {
+.flickrViewr .flickrViewrLoader {
   display: block;
   margin: auto;
 }
