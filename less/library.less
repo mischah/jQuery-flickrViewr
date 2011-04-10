@@ -1,0 +1,38 @@
+//
+// ------------------------------------------------------------------------------------------------- #
+//
+// GENERIC CLASSES
+//
+//
+
+// debug
+.debug {
+	border: 1px solid red;
+}
+
+
+//
+// ------------------------------------------------------------------------------------------------- #
+//
+// CSS3 Mixins
+//
+//
+
+
+.rounded-corners (@radius: 11px) {
+	-moz-border-radius: @radius;
+	-webkit-border-radius: @radius;
+	border-radius: @radius;
+}
+
+.box-shadow (@x: 2px, @y: 2px, @rad: 3px, @color: #666) {
+	-moz-box-shadow: @x @y @rad @color;
+	-webkit-box-shadow: @x @y @rad @color;
+	box-shadow: @x @y @rad @color;
+}
+
+.box-shadow-inset (@x: 2px, @y: 2px, @rad: 3px, @color: #666) {
+	-moz-box-shadow: inset @x @y @rad @color;
+	-webkit-box-shadow: inset @x @y @rad @color;
+	box-shadow: inset @x @y @rad @color;
+}

@@ -59,7 +59,7 @@
 			var element = $('.flickrViewr', this);
 							
 			// Place the loader gif.
-			var loader = $('<img alt="">').attr('id', 'loader').attr('src', 'images/jquery.flickrViewr/ajax-loader.gif').appendTo(element);
+			var loader = $('<img alt="">').attr('class', 'loader').attr('src', 'images/jquery.flickrViewr/ajax-loader.gif').appendTo(element);
 
 			// Ajax request
 			var jqxhr = $.getJSON('http://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&jsoncallback=?', {
@@ -81,10 +81,8 @@
 					//console.log(photoUrl);
 					// turn the photo id into a variable
 					var photoID = item.id;
-
 					// put the images in a variable
-					images += '<img src="' + photoUrl + '" alt="" />';
-
+					images += '<div class="flickrViewrImage"><img src="' + photoUrl + '" alt="' + item.title + '" /></div>';
 				});
 				/*
 				* DOM manipulation:
@@ -92,7 +90,10 @@
 				* - Delete loader
 				*/
 				element.append(images);
-				$('#loader').remove();
+				$('.flickrViewrImage', element).each(function() {
+					$(this).width($('img', $(this)).outerWidth());
+				});
+				$('.loader').remove();
 			/**
 			 * Errorhandling: 
 			 * - What to do if Ajax request fails
