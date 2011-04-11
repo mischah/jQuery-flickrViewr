@@ -54,12 +54,15 @@
 			* Functionality of flickrViewr
 			*/
 			
+			// Container for error messages
+			var errorContainer = $('<div class="flickrViewrError"><h2>Error</h2><p></p></div>');
+			
 			// place an container div for all the new dom stuff
 			$('<div class="flickrViewr" />').appendTo(this);
 			var element = $('.flickrViewr', this);
 							
 			// Place the loader gif
-			element.append('<img src="images/jquery.flickrViewr/ajax-loader.gif" alt="" class="flickrViewrLoader">');
+			var loader = element.append('<img src="images/jquery.flickrViewr/ajax-loader.gif" alt="" class="flickrViewrLoader">');
 
 			// Ajax request
 			var jqxhr = $.getJSON('http://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&jsoncallback=?', {
@@ -68,26 +71,37 @@
 				extras: 'date_taken,geo,tags',
 				format: 'json'
 			}, function (data) {
-				var images = '';
-				//loop through the results with the following function
-				$.each(data.photoset.photo, function (i, item) {
-					//build the url of the photo
-					var photoUrl =	'http://farm' + item.farm + 
-									'.static.flickr.com/' + item.server +
-									'/' + item.id +
-									'_' + item.secret + 
-									'_' + options.imageSize + 
-									'.jpg';
-					// turn the photo id into a variable
-					var photoID = item.id;
-					// put the images in a variable
-					images += '<div class="flickrViewrImage"><img src="' + photoUrl + '" alt="' + item.title + '" /></div>';
-				});
-				/*
-				* DOM manipulation:
-				* - Insert images
+				/**
+				* Errorhandling: 
+				* Check the status of the API response.
 				*/
-				element.append(images);
+				if (data.stat === 'fail') {
+					// Get errormessage from API response
+					$('p', errorContainer).text(data.message+'.');
+					element.append(errorContainer);
+				}
+				else {
+					var images = '';				
+					// Loop through the results
+					$.each(data.photoset.photo, function (i, item) {
+						//build the url of the photo
+						var photoUrl =	'http://farm' + item.farm + 
+										'.static.flickr.com/' + item.server +
+										'/' + item.id +
+										'_' + item.secret + 
+										'_' + options.imageSize + 
+										'.jpg';
+						// turn the photo id into a variable
+						var photoID = item.id;
+						// put the images in a variable
+						images += '<div class="flickrViewrImage"><img src="' + photoUrl + '" alt="' + item.title + '" /></div>';
+					});
+					/*
+					* DOM manipulation:
+					* - Insert images
+					*/
+					element.append(images);
+				} 
 			});
 				
 			// If Ajax request is complete
@@ -104,11 +118,12 @@
 			});
 			
 			/**
-			 * Errorhandling: 
-			 * - What to do if Ajax request fails
-			 */
+			* Errorhandling: 
+			* - What to do if Ajax request fails
+			*/
 			jqxhr.error(function(){
-				// show error on screen	
+				$('p', errorContainer).text('Can’t connect do Flickr API.');
+				element.append(errorContainer);	
 			});
 		});
 		

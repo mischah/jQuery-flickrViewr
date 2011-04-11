@@ -1,9 +1,32 @@
 .debug {
   border: 1px solid red;
 }
+.defaultFont {
+  font: 12px/1.5 Verdana, Arial, sans-serif;
+}
 .flickrViewr .flickrViewrLoader {
   display: block;
   margin: auto;
+}
+.flickrViewr .flickrViewrError {
+  -moz-box-shadow: 2px 2px 3px #666666;
+  -webkit-box-shadow: 2px 2px 3px #666666;
+  box-shadow: 2px 2px 3px #666666;
+  font: 12px/1.5 Verdana, Arial, sans-serif;
+  -moz-border-radius: 9px;
+  -webkit-border-radius: 9px;
+  border-radius: 9px;
+  background: #f3f3f3;
+  margin: auto;
+  padding: 4px 10px 10px;
+  width: 300px;
+}
+.flickrViewr .flickrViewrError h2 {
+  background: url(../images/jquery.flickrViewr/exclamation.png) no-repeat 2px 50%;
+  border-bottom: 1px solid #bebebe;
+  font-weight: bold;
+  margin-bottom: 8px;
+  padding: 5px 0 5px 24px;
 }
 .flickrViewr .flickrViewrImage {
   -moz-box-shadow: 2px 2px 3px #666666;

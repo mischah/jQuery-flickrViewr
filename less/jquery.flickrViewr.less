@@ -1,9 +1,30 @@
 @import 'library';
 
+.defaultFont {
+	font: 12px/1.5 Verdana, Arial, sans-serif; 
+}
+
 .flickrViewr {
 	.flickrViewrLoader {
 		display: block;
 		margin: auto;
+	}
+	.flickrViewrError {
+		.box-shadow;
+		.defaultFont;
+		.rounded-corners;
+		background: #f3f3f3;
+		margin: auto;
+		padding: 4px 10px 10px; 
+		width: 300px;
+		h2 {
+			background: url(../images/jquery.flickrViewr/exclamation.png) no-repeat 2px 50%;
+			border-bottom: 1px solid #bebebe;
+			font-weight: bold;
+			margin-bottom: 8px;
+			padding: 5px 0 5px 24px;
+		}
+		
 	}
 	.flickrViewrImage {
 		.box-shadow;
