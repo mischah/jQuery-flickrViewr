@@ -64,46 +64,51 @@
 			// Place the loader gif
 			var loader = element.append('<img src="images/jquery.flickrViewr/ajax-loader.gif" alt="Loading images …" class="flickrViewrLoader">');
 
-			// Ajax request
-			var jqxhr = $.getJSON('http://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&jsoncallback=?', {
-				api_key: options.apiKey,
-				photoset_id: options.photosetId,
-				extras: 'date_taken,geo,tags',
-				format: 'json'
-			}, function (data) {
-				/**
-				* Errorhandling: 
-				* Check the status of the API response.
-				*/
-				if (data.stat === 'fail') {
-					// Get errormessage from API response
-					$('p', errorContainer).text(data.message+'.');
-					element.append(errorContainer);
-				}
-				else {
-					var images = '';				
-					// Loop through the results
-					$.each(data.photoset.photo, function (i, item) {
-						//build the url of the photo
-						var photoUrl =	'http://farm' + item.farm + 
-										'.static.flickr.com/' + item.server +
-										'/' + item.id +
-										'_' + item.secret + 
-										'_' + options.imageSize + 
-										'.jpg';
-						// turn the photo id into a variable
-						var photoID = item.id;
-						// put the images in a variable
-						images += '<div class="flickrViewrImage"><img src="' + photoUrl + '" alt="' + item.title + '" /></div>';
-					});
-					/*
-					* DOM manipulation:
-					* - Insert images
+			var jqxhr = $.ajax({
+				url : 'http://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&jsoncallback=?',
+				data : {
+					api_key: options.apiKey,
+					photoset_id: options.photosetId,
+					extras: 'date_taken,geo,tags',
+					format: 'json'
+				},
+		    	dataType : 'json',
+		    	timeout : 5000,
+		    	success : function (data) {
+					/**
+					* Errorhandling: 
+					* Check the status of the API response.
 					*/
-					element.append(images);
-				} 
+					if (data.stat === 'fail') {
+						// Get errormessage from API response
+						$('p', errorContainer).text(data.message+'.');
+						element.append(errorContainer);
+					}
+					else {
+						var images = '';				
+						// Loop through the results
+						$.each(data.photoset.photo, function (i, item) {
+							//build the url of the photo
+							var photoUrl =	'http://farm' + item.farm + 
+											'.static.flickr.com/' + item.server +
+											'/' + item.id +
+											'_' + item.secret + 
+											'_' + options.imageSize + 
+											'.jpg';
+							// turn the photo id into a variable
+							var photoID = item.id;
+							// put the images in a variable
+							images += '<div class="flickrViewrImage"><img src="' + photoUrl + '" alt="' + item.title + '" /></div>';
+						});
+						/*
+						* DOM manipulation:
+						* - Insert images
+						*/
+						element.append(images);
+					} 
+				}
 			});
-				
+						
 			// If Ajax request is complete
 			jqxhr.complete(function(){
 				/*
@@ -127,6 +132,7 @@
 			});
 		});
 		
+
 					
 	};
 	// Default options
