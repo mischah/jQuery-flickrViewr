@@ -78,7 +78,6 @@
 									'_' + item.secret + 
 									'_' + options.imageSize + 
 									'.jpg';
-					//console.log(photoUrl);
 					// turn the photo id into a variable
 					var photoID = item.id;
 					// put the images in a variable
@@ -87,22 +86,33 @@
 				/*
 				* DOM manipulation:
 				* - Insert images
-				* - Delete loader
 				*/
 				element.append(images);
+			});
+				
+			// If Ajax request is complete
+			jqxhr.complete(function(){
+				/*
+				* DOM manipulation:
+				* - Define container width
+				* - Delete loader
+				*/
 				$('.flickrViewrImage', element).each(function() {
 					$(this).width($('img', $(this)).outerWidth());
 				});
 				$('.flickrViewrLoader').remove();
+			});
+			
 			/**
 			 * Errorhandling: 
 			 * - What to do if Ajax request fails
 			 */
-			}).error(function () {
-				// show error on screen
+			jqxhr.error(function(){
+				// show error on screen	
 			});
 		});
 		
+					
 	};
 	// Default options
 	$.fn.flickrViewr.defaults = { 
