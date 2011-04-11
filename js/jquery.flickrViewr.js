@@ -62,7 +62,7 @@
 			var element = $('.flickrViewr', this);
 							
 			// Place the loader gif
-			var loader = element.append('<img src="images/jquery.flickrViewr/ajax-loader.gif" alt="" class="flickrViewrLoader">');
+			var loader = element.append('<img src="images/jquery.flickrViewr/ajax-loader.gif" alt="Loading images …" class="flickrViewrLoader">');
 
 			// Ajax request
 			var jqxhr = $.getJSON('http://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&jsoncallback=?', {
