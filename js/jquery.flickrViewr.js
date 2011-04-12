@@ -57,7 +57,7 @@
  * More than 500 are not applicable du to Flickr API restrictions.
 
  @option render.infiniteScroll.threshold integer
- * @default 0
+ * @default 50
  * @description 
  * This one is optional.
  * This describes how close to the bottom of the page the lazyloading
@@ -112,6 +112,19 @@ if (!window.console) {
 			var loader = $('<img src="images/jquery.flickrViewr/ajax-loader.gif" alt="Loading images …" class="flickrViewrLoader">');
 			element.append(loader);
 			
+			/**
+			 * @param {string} message The debug message
+			 * @description Displaying debug messages on the website
+			 * and on the console (if available)
+			 */
+			function debug(message) {
+				var debug = $('.flickrViewrDebug', element);
+				if ( debug.length === 0) {
+					element.prepend('<div class="flickrViewrDebug"></div>');
+				} 
+				debug.text(message);
+				console.log(message);
+			}
 			
 			/**
 			 * @param {integer} loadPage The number of the 'page' that should be loaded. Needed for lazy loading of images.
@@ -189,8 +202,8 @@ if (!window.console) {
 						* This function is called by the function below
 						*/ 			
 						function lazyLoad() {
-							console.log('Page'+element.data('page')+' of '+element.data('pages'));
-							console.info('lazyLoad fired');
+							//debug('Page'+element.data('page')+' of '+element.data('pages'));
+							//debug('lazyLoad fired');
 							if (element.data('page') < element.data('pages')) {
 								element.append(loader);
 								loadImages(element.data('page')+1);
@@ -205,7 +218,8 @@ if (!window.console) {
 							var viewportHeight = $(window).height();
 							var documentHeight = $(document).height();
 							var pixelsToTop = $(document).scrollTop();
-							// console.log('documentHeight-viewportHeight = '+(documentHeight-viewportHeight-50)+'; pixelsToTop = '+ pixelsToTop);
+							//debug('documentHeight-viewportHeight = '+(documentHeight-viewportHeight)+'; pixelsToTop = '+ pixelsToTop);
+							debug('documentHeight = ' + documentHeight + '; viewportHeight = '+ viewportHeight +'; pixelsToTop = '+ pixelsToTop);
 							if ((documentHeight - viewportHeight - options.render.infiniteScroll.threshold) <= pixelsToTop) {
 								lazyLoad();
 								$(this).unbind('scroll.flickrViewr');
@@ -237,7 +251,7 @@ if (!window.console) {
 			mode: '',
 			infiniteScroll : {
 				perPage : 500,
-				threshold: 0
+				threshold: 50
 			} 
 		}
 	

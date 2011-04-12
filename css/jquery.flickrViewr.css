@@ -4,6 +4,16 @@
 .defaultFont {
   font: 12px/1.5 Verdana, Arial, sans-serif;
 }
+.flickrViewr .flickrViewrDebug {
+  background: #bebebe;
+  border: 1px solid #000;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 5px;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+}
 .flickrViewr .flickrViewrLoader {
   display: block;
   margin: auto;
