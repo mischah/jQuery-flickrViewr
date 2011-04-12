@@ -68,6 +68,19 @@
  
 */
 
+/**
+ * @description Console fix
+ * Avoiding errors if no console is available
+ */
+if (!window.console) {
+	window.console = {
+		log		: function (event) {},
+		info	: function (event) {},
+		warn	: function (event) {},
+		error	: function (event) {}
+	}
+}
+
 // jQuery wrapper 
 (function ($) {
 	$.fn.flickrViewr = function (options) {
