@@ -31,7 +31,14 @@
 					$('#main').flickrViewr({
 						apiKey: '447d8ef1e0e6610a651becb938226228',
 						photosetId: '72157624367929792',
-						imageSize: 'm'
+						imageSize: 'm',
+						render: {
+							mode: 'infiniteScroll',
+							infiniteScroll : {
+								perPage : 3,
+								threshold: 10
+							} 
+						}
 					});
 				}  
 			} 
