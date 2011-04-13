@@ -239,7 +239,7 @@ if (!window.console) {
 				}).error(function () {
 					$('p', errorContainer).text('Can’t connect do Flickr API.');
 					element.append(errorContainer);
-					$('.flickrViewrLoader', element).remove();
+					loader.fadeOut().remove();
 				});
 			
 			})(1); // Initial call of loadImages(1) 
