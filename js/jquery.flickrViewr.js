@@ -38,25 +38,26 @@
  * 'b'	-		large, 1024 on longest side
  * See http://www.flickr.com/services/api/misc.urls.html
  
- @option render.mode string
+ @option renderMode string
  * @default ''
  * @description 
  * This one is optional.
  * The way you like your images to be rendered.
  * Following rendermodes are available.
  * 'infiniteScroll'	-	lazyload pictures while scrolling
+ * or on click.
  *
  * If you choose 'infiniteScroll' as renderMode you have to set a
  * few more options …
  
- @option render.infiniteScroll.perPage integer
+ @option perPage integer
  * @default 500
  * @description 
  * This one is optional.
  * specifies the amount of pictures to be displayed per ajax request.
  * More than 500 are not applicable du to Flickr API restrictions.
 
- @option render.infiniteScroll.threshold integer
+ @option threshold integer
  * @default 50
  * @description 
  * This one is optional.
@@ -64,7 +65,19 @@
  * should be triggered. Let's say you choose a high number like 400:
  * Now the new images are loaded 400 pixel before the user scrolled
  * to the bottom of the page. 
+ 
+ @option clickToLoad boolean
+ * @default false
+ * @description 
+ * This one is optional.
+ * You have to click a button to load more images if you set this one
+ * to true.  
 
+ @option anchorText ''
+ * @default 'Click for more …'
+ * @description 
+ * This one is optional.
+ * You can overwrite the text of the button if you choose clickToLoad.
  
 */
 
@@ -137,7 +150,7 @@ if (!window.console) {
 						api_key: options.apiKey,
 						photoset_id: options.photosetId,
 						extras: 'date_taken,geo,tags',
-						per_page: options.render.infiniteScroll.perPage,
+						per_page: options.perPage,
 						page: loadPage,
 						format: 'json'
 					},
@@ -199,7 +212,7 @@ if (!window.console) {
 							});
 							
 							// Lazyloading for rendermode 'infiniteScroll'				
-							if (options.render.mode === 'infiniteScroll') {
+							if (options.renderMode === 'infiniteScroll') {
 								
 								/**
 								* @description loading more images
@@ -209,8 +222,8 @@ if (!window.console) {
 									// Check if there are additional images to load
 									if (element.data('page') < element.data('pages')) {
 										//decide for lazyloading or clickToLoad 
-										if (options.render.infiniteScroll.clickToLoad === true) {
-											var anchor = $('<a href="#" class="flickrViewrMore">'+options.render.infiniteScroll.anchorText+'</a>');
+										if (options.clickToLoad === true) {
+											var anchor = $('<a href="#" class="flickrViewrMore">'+options.anchorText+'</a>');
 											anchor.bind('click.flickrViewr', function (e) {
 												e.preventDefault();
 												loadImages(element.data('page')+1);
@@ -237,7 +250,7 @@ if (!window.console) {
 									var pixelsToTop = $(document).scrollTop();
 									//debug('documentHeight-viewportHeight = '+(documentHeight-viewportHeight)+'; pixelsToTop = '+ pixelsToTop);
 									//debug('documentHeight = ' + documentHeight + '; viewportHeight = '+ viewportHeight +'; pixelsToTop = '+ pixelsToTop);
-									if ((documentHeight - viewportHeight - options.render.infiniteScroll.threshold) <= pixelsToTop) {
+									if ((documentHeight - viewportHeight - options.threshold) <= pixelsToTop) {
 										lazyLoad();
 										$(this).unbind('scroll.flickrViewr');
 									}
@@ -268,16 +281,11 @@ if (!window.console) {
 		apiKey: '',
 		photosetId: '',
 		imageSize: 'm',
-		render: {
-			mode: '',
-			infiniteScroll : {
-				perPage : 500,
-				threshold: 50,
-				clickToLoad: false, 
-				anchorText: 'Click for more …'
-			} 
-		}
-	
+		renderMode: '',
+		perPage : 500,
+		threshold: 50,
+		clickToLoad: false, 
+		anchorText: 'Click for more …'
 	};
 })(jQuery);
 

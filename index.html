@@ -32,15 +32,11 @@
 						apiKey: '447d8ef1e0e6610a651becb938226228',
 						photosetId: '72157623216607743',
 						imageSize: 'm',
-						render: {
-							mode: 'infiniteScroll',
-							infiniteScroll : {
-								perPage : 3,
-								threshold: 0,
-								clickToLoad: true,
-								anchorText: 'Weitere Bilder laden …'
-							} 
-						}
+						renderMode: 'infiniteScroll',
+						perPage : 5,
+						threshold: 100,
+						clickToLoad: true,
+						anchorText: 'Weitere Bilder laden …'
 					});
 				}  
 			} 
