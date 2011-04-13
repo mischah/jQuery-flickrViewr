@@ -142,7 +142,7 @@ if (!window.console) {
 						format: 'json'
 					},
 					dataType: 'json',
-					timeout: 5000,
+					timeout: 10000,
 					success: function (data) {
 						/**
 						 * Errorhandling: 
@@ -180,52 +180,58 @@ if (!window.console) {
 								pages: data.photoset.pages
 							})
 							
+							$('.flickrViewrImage:not(.loaded)', element).css('visibility','hidden');
+							
+							$('.flickrViewrImage:not(.loaded) img', element).bind("load.flickrViewr", function () {
+								//alert('Image loaded');
+								//debug('Image loaded');
+								//$(this).addClass('imageLoaded');
+			  					/*
+								* DOM manipulation:
+								* - Define container width
+								* - Delete loader
+								* - Show image containers
+								*/
+								$(this).parent().width(this.width);
+								loader.fadeOut().remove();
+								$('.flickrViewrImage:not(.loaded)', element).css('visibility','visible');
+								$(this).parent().addClass('loaded');								
+							});
+							
+							// Lazyloading for rendermode 'infiniteScroll'				
+							if (options.render.mode === 'infiniteScroll') {
+								
+								/**
+								* @description loading more images
+								* This function is called by the function below
+								*/ 			
+								function lazyLoad() {
+									//debug('Page'+element.data('page')+' of '+element.data('pages'));
+									//debug('lazyLoad fired');
+									if (element.data('page') < element.data('pages')) {
+										element.append(loader.css('display', 'block'));
+										loadImages(element.data('page')+1);
+									}
+								}
+								
+								/**
+								* @description Check when to load more images
+								* 
+								*/ 
+								$(window).bind('scroll.flickrViewr', function () {
+									var viewportHeight = $(window).height();
+									var documentHeight = $(document).height();
+									var pixelsToTop = $(document).scrollTop();
+									//debug('documentHeight-viewportHeight = '+(documentHeight-viewportHeight)+'; pixelsToTop = '+ pixelsToTop);
+									//debug('documentHeight = ' + documentHeight + '; viewportHeight = '+ viewportHeight +'; pixelsToTop = '+ pixelsToTop);
+									if ((documentHeight - viewportHeight - options.render.infiniteScroll.threshold) <= pixelsToTop) {
+										lazyLoad();
+										$(this).unbind('scroll.flickrViewr');
+									}
+								});
+							}		
 						}
-					}
-				// If Ajax request is complete
-				}).complete(function () {
-					/*
-					* DOM manipulation:
-					* - Define container width
-					* - Delete loader
-					*/
-					$('.flickrViewrImage', element).each(function () {
-						$(this).width($('img', $(this)).outerWidth());
-					});
-					$('.flickrViewrLoader').remove();
-			
-					// Lazyloading for rendermode 'infiniteScroll'				
-					if (options.render.mode === 'infiniteScroll') {
-						
-						/**
-						* @description loading more images
-						* This function is called by the function below
-						*/ 			
-						function lazyLoad() {
-							//debug('Page'+element.data('page')+' of '+element.data('pages'));
-							//debug('lazyLoad fired');
-							if (element.data('page') < element.data('pages')) {
-								element.append(loader);
-								loadImages(element.data('page')+1);
-							}
-						}
-						
-						/**
-						* @description Check when to load more images
-						* 
-						*/ 
-						$(window).bind('scroll.flickrViewr', function () {
-							var viewportHeight = $(window).height();
-							var documentHeight = $(document).height();
-							var pixelsToTop = $(document).scrollTop();
-							//debug('documentHeight-viewportHeight = '+(documentHeight-viewportHeight)+'; pixelsToTop = '+ pixelsToTop);
-							debug('documentHeight = ' + documentHeight + '; viewportHeight = '+ viewportHeight +'; pixelsToTop = '+ pixelsToTop);
-							if ((documentHeight - viewportHeight - options.render.infiniteScroll.threshold) <= pixelsToTop) {
-								lazyLoad();
-								$(this).unbind('scroll.flickrViewr');
-							}
-						});
-					}
+					}	
 				/**
 				 * Errorhandling: 
 				 * - What to do if Ajax request fails
@@ -233,12 +239,14 @@ if (!window.console) {
 				}).error(function () {
 					$('p', errorContainer).text('Can’t connect do Flickr API.');
 					element.append(errorContainer);
+					$('.flickrViewrLoader', element).remove();
 				});
 			
 			})(1); // Initial call of loadImages(1) 
 			
 		});
 		
+
 
 					
 	};

@@ -36,3 +36,10 @@
 	-webkit-box-shadow: inset @x @y @rad @color;
 	box-shadow: inset @x @y @rad @color;
 }
+
+.transition (@property: opacity, @duration: 1s, @easing: ease) {
+	-webkit-transition: @property @duration @easing;
+	-moz-transition: @property @duration @easing;
+	-o-transition: @property @duration @easing;
+	transition: @property @duration @easing;
+}
