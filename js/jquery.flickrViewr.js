@@ -206,11 +206,24 @@ if (!window.console) {
 								* This function is called by the function below
 								*/ 			
 								function lazyLoad() {
-									//debug('Page'+element.data('page')+' of '+element.data('pages'));
-									//debug('lazyLoad fired');
+									// Check if there are additional images to load
 									if (element.data('page') < element.data('pages')) {
-										element.append(loader.css('display', 'block'));
-										loadImages(element.data('page')+1);
+										//decide for lazyloading or clickToLoad 
+										if (options.render.infiniteScroll.clickToLoad === true) {
+											var anchor = $('<a href="#" class="flickrViewrMore">'+options.render.infiniteScroll.anchorText+'</a>');
+											anchor.bind('click.flickrViewr', function (e) {
+												e.preventDefault();
+												loadImages(element.data('page')+1);
+												element.append(loader.css('display', 'block'));
+												$(this).remove();		
+											});
+											element.append(anchor);
+										} 
+										// loading without clicking
+										else {
+											element.append(loader.css('display', 'block'));
+											loadImages(element.data('page')+1);
+										}
 									}
 								}
 								
@@ -259,7 +272,9 @@ if (!window.console) {
 			mode: '',
 			infiniteScroll : {
 				perPage : 500,
-				threshold: 50
+				threshold: 50,
+				clickToLoad: false, 
+				anchorText: 'Click for more …'
 			} 
 		}
 	

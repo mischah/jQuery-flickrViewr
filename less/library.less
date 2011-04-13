@@ -25,6 +25,12 @@
 	border-radius: @radius;
 }
 
+.gradient-background (@from: #fff, @to:  #ededed) {
+	background: -webkit-gradient(linear, left top, left bottom, from(@from), to(@to));
+	background: -moz-linear-gradient(top,  @from,  @to);
+	
+}
+
 .box-shadow (@x: 2px, @y: 2px, @rad: 3px, @color: #666) {
 	-moz-box-shadow: @x @y @rad @color;
 	-webkit-box-shadow: @x @y @rad @color;
@@ -35,6 +41,10 @@
 	-moz-box-shadow: inset @x @y @rad @color;
 	-webkit-box-shadow: inset @x @y @rad @color;
 	box-shadow: inset @x @y @rad @color;
+}
+
+.text-shadow (@x: 0, @y: 1px, @rad: 1px, @color: rgba(0,0,0,.3)) {
+	text-shadow: @x @y @rad @color; 
 }
 
 .transition (@property: opacity, @duration: 1s, @easing: ease) {
