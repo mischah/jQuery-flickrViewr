@@ -27,7 +27,7 @@
  * where 72157624367929792 is the photosetId
  
  * @option imageSize string
- * @default 'm'
+ * @default 'z'
  * @description 
  * This one is optional 
  * Imagessizes provided by flickr are:  
@@ -44,8 +44,8 @@
  * This one is optional.
  * The way you like your images to be rendered.
  * Following rendermodes are available.
- * 'infiniteScroll'	-	lazyload pictures while scrolling
- * or on click.
+ * 'infiniteScroll'	- lazyload pictures while scrolling or on click.
+ * 'lightBox' - show thumnbnails and open larger images in a modal window
  *
  * If you choose 'infiniteScroll' as renderMode you have to set a
  * few more options …
@@ -117,13 +117,16 @@ if (!window.console) {
 			// Container for error messages
 			var errorContainer = $('<div class="flickrViewrError"><h2>Error</h2><p></p></div>');
 			
-			// place an container div for all the new dom stuff
-			$('<div class="flickrViewr" />').appendTo(this);
-			var element = $('.flickrViewr', this);
+			/**
+			* Place a container div for all the new DOM stuff
+			* @description Add classes for pluginname und rendermode
+			*/
+			var myContainer = $('<div class="flickrViewr '+ options.renderMode +'" />').appendTo(this);
+			myContainer = $('.flickrViewr', this);
 							
 			// Place the loader gif
 			var loader = $('<img src="images/jquery.flickrViewr/ajax-loader.gif" alt="Loading images …" class="flickrViewrLoader">');
-			element.append(loader);
+			myContainer.append(loader);
 			
 			/**
 			 * @param {string} message The debug message
@@ -131,9 +134,9 @@ if (!window.console) {
 			 * and on the console (if available)
 			 */
 			function debug(message) {
-				var debug = $('.flickrViewrDebug', element);
+				var debug = $('.flickrViewrDebug', myContainer);
 				if ( debug.length === 0) {
-					element.prepend('<div class="flickrViewrDebug"></div>');
+					myContainer.prepend('<div class="flickrViewrDebug"></div>');
 				} 
 				debug.text(message);
 				console.log(message);
@@ -164,94 +167,101 @@ if (!window.console) {
 						if (data.stat === 'fail') {
 							// Get errormessage from API response
 							$('p', errorContainer).text(data.message + '.');
-							element.append(errorContainer);
+							myContainer.append(errorContainer);
 						}
 						else {
 							var images = '';
 							// Loop through the results
 							$.each(data.photoset.photo, function (i, item) {
-								//build the url of the photo
-								var photoUrl =	'http://farm' + item.farm + 
-												'.static.flickr.com/' + item.server +
-												'/' + item.id +
-												'_' + item.secret +
-												'_' + options.imageSize +
-												'.jpg';
-								// turn the photo id into a variable
-								var photoID = item.id;
-								// put the images in a variable
-								images += '<div class="flickrViewrImage"><img src="' + photoUrl + '" alt="' + item.title + '" /></div>';
+								/**
+								 * @param {string} imageSize The desired imagesize
+								 * @description Build the url of the photo
+								 */
+								var getPhotoUrl = function(imageSize) {
+									return	'http://farm' + item.farm + 
+											'.static.flickr.com/' + item.server +
+											'/' + item.id +
+											'_' + item.secret +
+											'_' + imageSize +
+											'.jpg';
+								}
+								// Put the images in a variable
+								images += '<div class="flickrViewrImage">'
+								if (options.renderMode === 'lightBox') {
+									images +=	'<a href="' + getPhotoUrl(options.imageSize) + '" rel="photosetID-' + options.photosetId + '">' +
+													'<img src="' + getPhotoUrl(options.thumbnailSize) + '" alt="' + item.title + '" />' + 
+												'</a>';
+								}
+								else {
+									images += '<img src="' + getPhotoUrl(options.imageSize) + '" alt="' + item.title + '" />';
+								}
+								images += '</div>';
 							});
 							/*
 							* DOM manipulation:
 							* - Insert images
-							* - store the actual page and the number of total pages on our container element
+							* - Store the actual page and the number of total pages on our container element
 							*/
-							element.append(images);
-							element.data({
+							myContainer.append($(images));
+							if (options.renderMode === 'lightBox') {
+								$('a', myContainer).fancybox(options.fancyBox);
+							}
+							myContainer.data({
 								page: parseInt(data.photoset.page),
 								pages: data.photoset.pages
 							})
 							
-							$('.flickrViewrImage:not(.loaded)', element).css('visibility','hidden');
-							
-							$('.flickrViewrImage:not(.loaded) img', element).bind("load.flickrViewr", function () {
-								//alert('Image loaded');
-								//debug('Image loaded');
-								//$(this).addClass('imageLoaded');
+							// Do the following if the placed images are loaded
+							$('.flickrViewrImage:not(.loaded) img', myContainer).bind("load.flickrViewr", function () {
 			  					/*
 								* DOM manipulation:
 								* - Define container width
 								* - Delete loader
 								* - Show image containers
 								*/
-								$(this).parent().width(this.width);
+								$(this).parents('.flickrViewrImage').width(this.width).addClass('loaded');
 								loader.fadeOut().remove();
-								$('.flickrViewrImage:not(.loaded)', element).css('visibility','visible');
-								$(this).parent().addClass('loaded');								
 							});
 							
-							// Lazyloading for rendermode 'infiniteScroll'				
+							// Loading the next images in renderMode 'infiniteScroll'
 							if (options.renderMode === 'infiniteScroll') {
-								
 								/**
-								* @description loading more images
+								* @description Loading more images
 								* This function is called by the function below
 								*/ 			
-								function lazyLoad() {
+								var additionalImages = function() {
 									// Check if there are additional images to load
-									if (element.data('page') < element.data('pages')) {
+									if (myContainer.data('page') < myContainer.data('pages')) {
 										//decide for lazyloading or clickToLoad 
 										if (options.clickToLoad === true) {
 											var anchor = $('<a href="#" class="flickrViewrMore">'+options.anchorText+'</a>');
 											anchor.bind('click.flickrViewr', function (e) {
 												e.preventDefault();
-												loadImages(element.data('page')+1);
-												element.append(loader.css('display', 'block'));
-												$(this).remove();		
+												loadImages(myContainer.data('page')+1);
+												myContainer.append(loader.css('display', 'block'));
+												$(this).remove();
+												$(this).unbind('click.flickrViewr');		
 											});
-											element.append(anchor);
+											// DOM: Place the button to load additional images
+											myContainer.append(anchor);
 										} 
-										// loading without clicking
+										// Lazy loading without clicking 
 										else {
-											element.append(loader.css('display', 'block'));
-											loadImages(element.data('page')+1);
+											myContainer.append(loader.css('display', 'block'));
+											loadImages(myContainer.data('page')+1);
 										}
 									}
 								}
 								
 								/**
-								* @description Check when to load more images
-								* 
+								* @description Check when to call additionalImages()
 								*/ 
 								$(window).bind('scroll.flickrViewr', function () {
 									var viewportHeight = $(window).height();
 									var documentHeight = $(document).height();
 									var pixelsToTop = $(document).scrollTop();
-									//debug('documentHeight-viewportHeight = '+(documentHeight-viewportHeight)+'; pixelsToTop = '+ pixelsToTop);
-									//debug('documentHeight = ' + documentHeight + '; viewportHeight = '+ viewportHeight +'; pixelsToTop = '+ pixelsToTop);
 									if ((documentHeight - viewportHeight - options.threshold) <= pixelsToTop) {
-										lazyLoad();
+										additionalImages();
 										$(this).unbind('scroll.flickrViewr');
 									}
 								});
@@ -264,10 +274,10 @@ if (!window.console) {
 				 */
 				}).error(function () {
 					$('p', errorContainer).text('Can’t connect do Flickr API.');
-					element.append(errorContainer);
+					myContainer.append(errorContainer);
 					loader.fadeOut().remove();
 				});
-			
+
 			})(1); // Initial call of loadImages(1) 
 			
 		});
@@ -280,12 +290,16 @@ if (!window.console) {
 	$.fn.flickrViewr.defaults = { 
 		apiKey: '',
 		photosetId: '',
-		imageSize: 'm',
+		imageSize: 'z',
 		renderMode: '',
 		perPage : 500,
 		threshold: 50,
 		clickToLoad: false, 
-		anchorText: 'Click for more …'
+		anchorText: 'Click for more …',
+		thumbnailSize: 's',
+		captions: true,
+		firstOnly: false,
+		fancyBox: {}
 	};
 })(jQuery);
 

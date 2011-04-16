@@ -6,6 +6,10 @@
 
 .flickrViewr {
 	text-align: center;
+	&.lightBox {
+		/* clearing the floating of .lightBox .flickrViewrImage */
+		overflow: auto; 
+	}
 	.flickrViewrDebug {
 		background: #bebebe;
 		border: 1px solid #000;
@@ -37,8 +41,14 @@
 		}
 		
 	}
-	.flickrViewrImage {
+	&.lightBox .flickrViewrImage {
+		float: left;
+		margin: 5px;
+	}
+	&.infiniteScroll .flickrViewrImage {
 		margin: 0 auto 100px;
+	}
+	.flickrViewrImage {
 		opacity: 0;
 		&.loaded {
 			.box-shadow;

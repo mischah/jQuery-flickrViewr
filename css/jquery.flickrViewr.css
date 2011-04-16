@@ -7,6 +7,11 @@
 .flickrViewr {
   text-align: center;
 }
+.flickrViewr.lightBox {
+  /* clearing the floating of .lightBox .flickrViewrImage */
+
+  overflow: auto;
+}
 .flickrViewr .flickrViewrDebug {
   background: #bebebe;
   border: 1px solid #000;
@@ -41,8 +46,14 @@
   margin-bottom: 8px;
   padding: 5px 0 5px 24px;
 }
-.flickrViewr .flickrViewrImage {
+.flickrViewr.lightBox .flickrViewrImage {
+  float: left;
+  margin: 5px;
+}
+.flickrViewr.infiniteScroll .flickrViewrImage {
   margin: 0 auto 100px;
+}
+.flickrViewr .flickrViewrImage {
   opacity: 0;
 }
 .flickrViewr .flickrViewrImage.loaded {
