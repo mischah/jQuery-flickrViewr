@@ -4,8 +4,11 @@ jQuery FlickrViewr
 Work in progress
 ----------------
 
-### Planned features:
+### Features:
 
-**Different Render Modes** (Infinite Scrolling/Slider/Thumbnailgallery with Lightbox)
+**Render Modes**
+* Infinite Scrolling - implemented
+* Thumbnailgallery with Lightbox - implemented
+* Slider - not started yet
 
 … Coming soon.

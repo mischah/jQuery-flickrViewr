@@ -79,8 +79,37 @@
 	 * @description 
 	 * This one is optional.
 	 * You can overwrite the text of the button if you choose clickToLoad.
+
+ * Options for renderMode 'lightBox':
+ * ----------------------------------------------------------------------- 
+	 @option thumbnailSize string
+	 * @default 's'
+	 * @description 
+	 * This one is optional 
+	 * Imagessizes provided by flickr are:  
+	 * 's'	-		small square 75 x 75
+	 * 't'	-		thumbnail, 100 on longest side
+	 * 'm'	-		small, 240 on longest side
+	 * 'z'	-		medium 640, 640 on longest side
+	 * 'b'	-		large, 1024 on longest side
+	 * See http://www.flickr.com/services/api/misc.urls.html
+	
+	 @option firstOnly boolean
+	 * @default false
+	 * @description 
+	 * This one is optional.
+	 * Setting true will only display the first image in the photoset on
+	 * the webpage. All images will still be available to the Fancybox
+	 * gallery.
+	 	
+	 @option fancybox object
+	 * @default {}
+	 * @description 
+	 * This one is optional.
+	 * Fancybox options get passed through to the fancybox method.
+	 * See http://fancybox.net/api for available options
  * -----------------------------------------------------------------------
- 
+
 */
 
 /**
