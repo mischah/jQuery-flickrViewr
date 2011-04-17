@@ -50,11 +50,12 @@
  * If you choose 'infiniteScroll' as renderMode you have to set a
  * few more options …
  
- @option perPage integer
- * @default 500
+ @option perRequest integer
+ * @default 10
  * @description 
  * This one is optional.
- * specifies the amount of pictures to be displayed per ajax request.
+ * Specifies the amount of pictures to be displayed per ajax request
+ * in renderMode 'infiniteScroll'.
  * More than 500 are not applicable du to Flickr API restrictions.
 
  @option threshold integer
@@ -147,13 +148,19 @@ if (!window.console) {
 			 * @description Self-executing function which will load page 1
 			 */
 			(function loadImages(loadPage) {
+				if (options.renderMode === 'infiniteScroll') {
+					var perRequest = options.perRequest;
+				}
+				else {
+					perRequest = 500;
+				}
 				var jqxhr = $.ajax({
 					url: 'http://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&jsoncallback=?',
 					data: {
 						api_key: options.apiKey,
 						photoset_id: options.photosetId,
 						extras: 'date_taken,geo,tags',
-						per_page: options.perPage,
+						per_page: perRequest,
 						page: loadPage,
 						format: 'json'
 					},
@@ -302,7 +309,7 @@ if (!window.console) {
 		photosetId: '',
 		imageSize: 'z',
 		renderMode: '',
-		perPage : 500,
+		perRequest : 10,
 		threshold: 50,
 		clickToLoad: false, 
 		anchorText: 'Click for more …',
