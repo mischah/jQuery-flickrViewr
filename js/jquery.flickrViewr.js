@@ -188,8 +188,10 @@ if (!window.console) {
 								// Put the images in a variable
 								images += '<div class="flickrViewrImage">'
 								if (options.renderMode === 'lightBox') {
-									images +=	'<a href="' + getPhotoUrl(options.imageSize) + '" rel="photosetID-' + options.photosetId + '">' +
-													'<img src="' + getPhotoUrl(options.thumbnailSize) + '" alt="' + item.title + '" />' + 
+									images +=	'<a href="' + getPhotoUrl(options.imageSize) +
+													'" title="' + item.title +
+													'" rel="photosetID-' + options.photosetId +'">' +
+														'<img src="' + getPhotoUrl(options.thumbnailSize) + '" alt="' + item.title + '" />' + 
 												'</a>';
 								}
 								else {
@@ -203,9 +205,16 @@ if (!window.console) {
 							* - Store the actual page and the number of total pages on our container element
 							*/
 							myContainer.append($(images));
+							// Call the fancybox plugin on the anchor elements
 							if (options.renderMode === 'lightBox') {
 								$('a', myContainer).fancybox(options.fancyBox);
 							}
+							// Just show the first image if targeted
+							if (options.firstOnly === true) {
+								//$(obj).find('li').not(':first').hide();
+								$('.flickrViewrImage', myContainer).not(':first').hide();
+							} 
+							
 							myContainer.data({
 								page: parseInt(data.photoset.page),
 								pages: data.photoset.pages
@@ -298,7 +307,6 @@ if (!window.console) {
 		clickToLoad: false, 
 		anchorText: 'Click for more …',
 		thumbnailSize: 's',
-		captions: true,
 		firstOnly: false,
 		fancyBox: {}
 	};
