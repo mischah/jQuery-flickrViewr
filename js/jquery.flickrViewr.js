@@ -39,7 +39,7 @@
  * See http://www.flickr.com/services/api/misc.urls.html
  
  @option renderMode string
- * @default ''
+ * @default 'infiniteScroll'
  * @description 
  * This one is optional.
  * The way you like your images to be rendered.
@@ -47,38 +47,39 @@
  * 'infiniteScroll'	- lazyload pictures while scrolling or on click.
  * 'lightBox' - show thumnbnails and open larger images in a modal window
  *
- * If you choose 'infiniteScroll' as renderMode you have to set a
- * few more options …
  
- @option perRequest integer
- * @default 10
- * @description 
- * This one is optional.
- * Specifies the amount of pictures to be displayed per ajax request
- * in renderMode 'infiniteScroll'.
- * More than 500 are not applicable du to Flickr API restrictions.
-
- @option threshold integer
- * @default 50
- * @description 
- * This one is optional.
- * This describes how close to the bottom of the page the lazyloading
- * should be triggered. Let's say you choose a high number like 400:
- * Now the new images are loaded 400 pixel before the user scrolled
- * to the bottom of the page. 
- 
- @option clickToLoad boolean
- * @default false
- * @description 
- * This one is optional.
- * You have to click a button to load more images if you set this one
- * to true.  
-
- @option anchorText ''
- * @default 'Click for more …'
- * @description 
- * This one is optional.
- * You can overwrite the text of the button if you choose clickToLoad.
+ * Options for renderMode 'infiniteScroll':
+ * ----------------------------------------------------------------------- 
+	 @option perRequest integer
+	 * @default 10
+	 * @description 
+	 * This one is optional.
+	 * Specifies the amount of pictures to be displayed per ajax request
+	 * in renderMode 'infiniteScroll'.
+	 * More than 500 are not applicable du to Flickr API restrictions.
+	
+	 @option threshold integer
+	 * @default 50
+	 * @description 
+	 * This one is optional.
+	 * This describes how close to the bottom of the page the lazyloading
+	 * should be triggered. Let's say you choose a high number like 400:
+	 * Now the new images are loaded 400 pixel before the user scrolled
+	 * to the bottom of the page. 
+	 
+	 @option clickToLoad boolean
+	 * @default false
+	 * @description 
+	 * This one is optional.
+	 * You have to click a button to load more images if you set this one
+	 * to true.  
+	
+	 @option anchorText ''
+	 * @default 'Click for more …'
+	 * @description 
+	 * This one is optional.
+	 * You can overwrite the text of the button if you choose clickToLoad.
+ * -----------------------------------------------------------------------
  
 */
 
@@ -308,7 +309,7 @@ if (!window.console) {
 		apiKey: '',
 		photosetId: '',
 		imageSize: 'z',
-		renderMode: '',
+		renderMode: 'infiniteScroll',
 		perRequest : 10,
 		threshold: 50,
 		clickToLoad: false, 
