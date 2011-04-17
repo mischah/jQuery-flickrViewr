@@ -221,6 +221,7 @@ if (!window.console) {
 								*/
 								$(this).parents('.flickrViewrImage').width(this.width).addClass('loaded');
 								loader.fadeOut().remove();
+								$(this).unbind('load.flickrViewr');
 							});
 							
 							// Loading the next images in renderMode 'infiniteScroll'
