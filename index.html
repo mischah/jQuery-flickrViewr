@@ -17,22 +17,22 @@
 	<link rel="stylesheet" href="js/libs/fancybox/jquery.fancybox-1.3.4.css?v=2" />
 	<script src="js/libs/modernizr.custom.min.js"></script>
 	<script type="text/javascript">
-		Modernizr.load({ 
+		Modernizr.load({
 			load: {
 				'jQuery': 'js/libs/jquery-1.5.2.js',
 				'flickrViewr': 'js/jquery.flickrViewr.js',
 				'fancybox': 'js/libs/fancybox/jquery.fancybox-1.3.4.js'
 			},
-			callback : {  
-				'jQuery' : function(url, result, key){  
-					//console.info('jQuery is loaded');  
-				},  
-				'flickrViewr' : function(url, result, key){  
+			callback : {
+				'jQuery' : function(url, result, key){
+					//console.info('jQuery is loaded');
+				},
+				'flickrViewr' : function(url, result, key){
 					//console.info('flickrViewr is loaded');
-					//$('#main').flickrViewr(); 
+					//$('#main').flickrViewr();
 					$('#main').flickrViewr({
 						apiKey: '447d8ef1e0e6610a651becb938226228',
-						photosetId: '72157626510278412',
+						photosetId: '72157629613268323',
 						imageSize: 'z',
 						//clickToLoad: true,
 						anchorText: 'Weitere Bilder laden …',
@@ -48,9 +48,9 @@
 							padding: 15
 						}
 					});
-				}  
-			} 
-		});  
+				}
+			}
+		});
 	</script>
 </head>
 <body>
@@ -58,11 +58,11 @@
 		<header>
 
 		</header>
-		
+
 		<div id="main" role="main">
-		
+
 		</div>
-		
+
 		<footer>
 
 		</footer>
